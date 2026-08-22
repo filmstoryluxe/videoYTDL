@@ -1,0 +1,7 @@
+{
+  "name": "videografiasi-youtube-download",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Videografiasi - YouTube Download pentru DaVinci Resolve Studio",
+  "main": "main.js"
+}

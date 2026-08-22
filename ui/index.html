@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self';">
+    <title>Videografiasi</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="videografiasi-icon.png" alt="Videografiasi" class="header-icon">
+        <h1>Videografiasi</h1>
+      </header>
+      <form id="search-form">
+        <input id="query" autocomplete="off" placeholder="Caută pe YouTube" autofocus>
+        <button type="submit">Caută</button>
+      </form>
+      <form id="url-form">
+        <input id="youtube-url" autocomplete="off" placeholder="sau lipește linkul YouTube aici">
+        <select id="direct-format" aria-label="Format link direct">
+          <option value="wav" selected>Audio · WAV</option>
+          <option value="mp3">Audio · MP3</option>
+          <option value="mp4-2160">Video · 4K</option>
+          <option value="mp4-1080">Video · 1080p</option>
+          <option value="mp4-720">Video · 720p</option>
+        </select>
+        <button type="submit">Download</button>
+      </form>
+      <p id="hint">Caută un clip sau lipează un link. Folderul se alege la fiecare download.</p>
+      <section id="results" aria-live="polite"></section>
+      <div id="pagination">
+        <button id="prev-page" type="button" disabled>← Pagina anterioară</button>
+        <span id="page-info">0 din 0</span>
+        <button id="next-page" type="button" disabled>Pagina următoare →</button>
+      </div>
+    </main>
+    <template id="result-template">
+      <article class="result">
+        <button class="preview" type="button" title="Previzualizează">
+          <img class="thumbnail" alt="">
+          <span class="play">▶</span>
+        </button>
+        <div class="info">
+          <div class="details">
+            <strong></strong>
+            <small></small>
+          </div>
+          <div class="actions">
+            <select aria-label="Format">
+              <option value="wav" selected>Audio · WAV</option>
+              <option value="mp3">Audio · MP3</option>
+              <option value="mp4-2160">Video · 4K</option>
+              <option value="mp4-1080">Video · 1080p</option>
+              <option value="mp4-720">Video · 720p</option>
+            </select>
+            <button class="download" type="button">Download</button>
+          </div>
+        </div>
+      </article>
+    </template>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -15,6 +15,7 @@ let currentPage = 0;
 let totalLoaded = 0;
 let allItems = [];
 let isLoadingPage = false;
+let noMoreResults = false;
 
 function setHint(text) {
   hint.textContent = text;
@@ -32,9 +33,11 @@ function setLoading(isLoading) {
 
 function updatePagination() {
   const totalPages = totalLoaded > 0 ? Math.ceil(totalLoaded / PAGE_SIZE) : 0;
-  pageInfo.textContent = totalLoaded > 0 ? `${currentPage + 1} din ${totalPages}` : '0 din 0';
+  pageInfo.textContent = totalLoaded > 0 ? `${currentPage + 1} din ${totalPages}+` : '0 din 0';
   prevPageBtn.disabled = currentPage === 0 || isLoadingPage || totalLoaded === 0;
-  nextPageBtn.disabled = (currentPage + 1) * PAGE_SIZE >= totalLoaded || isLoadingPage || totalLoaded === 0;
+  // Next button: always enabled if we might have more results (backend can load more)
+  // Only disable if we know for sure there are no more (empty searchMore returned)
+  nextPageBtn.disabled = isLoadingPage || totalLoaded === 0 || noMoreResults;
 }
 
 function renderPage() {
@@ -58,6 +61,7 @@ form.addEventListener('submit', async event => {
   currentPage = 0;
   allItems = [];
   totalLoaded = 0;
+  noMoreResults = false;
 
   try {
     const items = await window.videografiasi.search(text);
@@ -99,6 +103,7 @@ nextPageBtn.addEventListener('click', async () => {
         renderPage();
         setHint(`Afișare pagina ${currentPage + 1}. Total: ${totalLoaded} rezultate.`);
       } else {
+        noMoreResults = true;
         setHint('Nu mai sunt rezultate.');
       }
     } catch (error) {

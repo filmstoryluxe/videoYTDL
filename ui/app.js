@@ -1,3 +1,14 @@
+﻿// === TAB SWITCHING ===
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.tab-panel');
+
+tabs.forEach(tab => tab.addEventListener('click', () => {
+  tabs.forEach(t => t.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  const panel = document.getElementById('panel-' + tab.dataset.tab);
+  if (panel) panel.classList.add('active');
+}));
 const form = document.querySelector('#search-form');
 const query = document.querySelector('#query');
 const results = document.querySelector('#results');
@@ -206,3 +217,76 @@ function playPreview(card, item) {
   preview.classList.add('playing');
   preview.innerHTML = `<iframe title="Previzualizare YouTube" src="https://www.youtube.com/embed/${encodeURIComponent(item.id)}?autoplay=1&controls=1&rel=0&enablejsapi=1" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
 }
+﻿// === INSTAGRAM TAB ===
+const igForm = document.getElementById('instagram-form');
+const igUrl = document.getElementById('instagram-url');
+const igFormat = document.getElementById('instagram-format');
+const igHint = document.getElementById('instagram-hint');
+const igResults = document.getElementById('instagram-results');
+
+igForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const url = igUrl.value.trim();
+  if (!url) return;
+  const button = igForm.querySelector('button');
+  button.disabled = true;
+  button.textContent = 'Se descarcă...';
+  igHint.textContent = 'Se descarcă de pe Instagram…';
+  igResults.innerHTML = '';
+  try {
+    const response = await window.videografiasi.download({ url, format: igFormat.value });
+    if (!response.canceled) {
+      igHint.textContent = 'Fișierul a fost descărcat și importat în Media Pool.';
+      igUrl.value = '';
+      const tpl = document.getElementById('simple-result-template');
+      const card = tpl.content.firstElementChild.cloneNode(true);
+      card.querySelector('strong').textContent = response.filePath.split('!!S').pop();
+      card.querySelector('small').textContent = 'Importat în Media Pool';
+      igResults.append(card);
+    } else {
+      igHint.textContent = 'Descărcare anulată.';
+    }
+  } catch (error) {
+    igHint.textContent = error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Download';
+  }
+});
+
+// === TIKTOK TAB ===
+const ttForm = document.getElementById('tiktok-form');
+const ttUrl = document.getElementById('tiktok-url');
+const ttFormat = document.getElementById('tiktok-format');
+const ttHint = document.getElementById('tiktok-hint');
+const ttResults = document.getElementById('tiktok-results');
+
+ttForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const url = ttUrl.value.trim();
+  if (!url) return;
+  const button = ttForm.querySelector('button');
+  button.disabled = true;
+  button.textContent = 'Se descarcă...';
+  ttHint.textContent = 'Se descarcă de pe TikTok…';
+  ttResults.innerHTML = '';
+  try {
+    const response = await window.videografiasi.download({ url, format: ttFormat.value });
+    if (!response.canceled) {
+      ttHint.textContent = 'Fișierul a fost descărcat și importat în Media Pool.';
+      ttUrl.value = '';
+      const tpl = document.getElementById('simple-result-template');
+      const card = tpl.content.firstElementChild.cloneNode(true);
+      card.querySelector('strong').textContent = response.filePath.split('!!S').pop();
+      card.querySelector('small').textContent = 'Importat în Media Pool';
+      ttResults.append(card);
+    } else {
+      ttHint.textContent = 'Descărcare anulată.';
+    }
+  } catch (error) {
+    ttHint.textContent = error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Download';
+  }
+});

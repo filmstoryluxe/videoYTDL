@@ -3,8 +3,8 @@
   <Plugin>
     <Id>com.videografiasi.youtube.download</Id>
     <Name>Videografiasi</Name>
-    <Version>0.1.0</Version>
-    <Description>Videografiasi - YouTube Download pentru DaVinci Resolve Studio</Description>
+    <Version>0.2.0</Version>
+    <Description>Videografiasi - YouTube, Instagram si TikTok download pentru DaVinci Resolve Studio</Description>
     <FilePath>main.js</FilePath>
   </Plugin>
 </BlackmagicDesign>

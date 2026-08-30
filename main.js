@@ -18,6 +18,9 @@ const mimeTypes = {
   '.svg': 'image/svg+xml'
 };
 
+// URL patterns for supported platforms (YouTube + Instagram + TikTok)
+const urlPatterns = /^https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be|instagram\.com|tiktok\.com|vm\.tiktok\.com)\//i;
+
 function startLocalServer() {
   return new Promise((resolvePromise, reject) => {
     const root = path.resolve(pluginRoot);
@@ -38,7 +41,7 @@ function startLocalServer() {
         response.writeHead(200, {
           'Content-Type': mimeTypes[path.extname(filePath)] || 'application/octet-stream',
           'Referrer-Policy': 'strict-origin-when-cross-origin',
-          'Content-Security-Policy': "default-src 'self'; img-src 'self' https: data:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; style-src 'self'; script-src 'self'"
+          'Content-Security-Policy': "default-src 'self'; img-src 'self' https: data:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.instagram.com https://www.tiktok.com; style-src 'self'; script-src 'self'"
         });
         response.end(content);
       });
@@ -229,8 +232,8 @@ ipcMain.handle('search-more', async () => {
 
 ipcMain.handle('get-info', async (_event, url) => {
   const sourceUrl = String(url || '').trim();
-  if (!/^https:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(sourceUrl)) {
-    throw new Error('URL YouTube invalid.');
+  if (!urlPatterns.test(sourceUrl)) {
+    throw new Error('URL invalid. Suportă YouTube, Instagram și TikTok.');
   }
   const tool = ensureTool('yt-dlp.exe');
   const { stdout } = await run(tool, ['--dump-json', '--no-warnings', sourceUrl]);
@@ -263,8 +266,8 @@ ipcMain.handle('get-info', async (_event, url) => {
 ipcMain.handle('download', async (_event, request) => {
   const sourceUrl = String(request.url || '');
   const format = String(request.format || 'mp4-1080');
-  if (!/^https:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(sourceUrl)) {
-    throw new Error('Selectează un rezultat YouTube valid.');
+  if (!urlPatterns.test(sourceUrl)) {
+    throw new Error('URL invalid. Suportă YouTube, Instagram și TikTok.');
   }
 
   const picked = await dialog.showOpenDialog(mainWindow, {
@@ -279,6 +282,8 @@ ipcMain.handle('download', async (_event, request) => {
 
   if (format === 'mp3' || format === 'wav') {
     args.push('-x', '--audio-format', format, '--audio-quality', '0');
+  } else if (format === 'mp4') {
+    args.push('-f', 'best[ext=mp4]/best');
   } else {
     const height = { 'mp4-2160': 2160, 'mp4-1080': 1080, 'mp4-720': 720 }[format] || 1080;
     args.push('-f', videoFormat(height), '--merge-output-format', 'mp4');

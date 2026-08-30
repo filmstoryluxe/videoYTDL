@@ -1,7 +1,7 @@
 {
   "name": "videografiasi-youtube-download",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Videografiasi - YouTube Download pentru DaVinci Resolve Studio",
+  "description": "Videografiasi - YouTube, Instagram si TikTok download pentru DaVinci Resolve Studio",
   "main": "main.js"
 }

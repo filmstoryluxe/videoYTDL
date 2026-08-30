@@ -1,4 +1,4 @@
-# Videografiasi — YouTube Downloader pentru DaVinci Resolve Studio
+# Videografiasi — YouTube, Instagram si TikTok Downloader pentru DaVinci Resolve Studio
 # Instalare one-liner: irm https://raw.githubusercontent.com/filmstoryluxe/videoYTDL/main/install.ps1 | iex
 
 $ErrorActionPreference = 'Stop'
@@ -12,7 +12,7 @@ $target = Join-Path $env:ProgramData 'Blackmagic Design\DaVinci Resolve\Support\
 $ffmpegUrl = 'https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip'
 $ffmpegZip = Join-Path $env:TEMP 'ffmpeg-videografiasi.zip'
 
-Write-Host 'Videografiasi — YouTube Downloader pentru DaVinci Resolve' -ForegroundColor Cyan
+Write-Host 'Videografiasi — YouTube, Instagram si TikTok Downloader pentru DaVinci Resolve' -ForegroundColor Cyan
 Write-Host ''
 
 # === 1. Download plugin from GitHub ===

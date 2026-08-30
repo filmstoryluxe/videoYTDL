@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://www.instagram.com https://www.tiktok.com; connect-src 'self'">
     <title>Videografiasi</title>
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -13,27 +13,60 @@
         <img src="videografiasi-icon.png" alt="Videografiasi" class="header-icon">
         <h1>Videografiasi</h1>
       </header>
-      <form id="search-form">
-        <input id="query" autocomplete="off" placeholder="Caută pe YouTube" autofocus>
-        <button type="submit">Caută</button>
-      </form>
-      <form id="url-form">
-        <input id="youtube-url" autocomplete="off" placeholder="sau lipește linkul YouTube aici">
-        <select id="direct-format" aria-label="Format link direct">
-          <option value="wav" selected>Audio · WAV</option>
-          <option value="mp3">Audio · MP3</option>
-          <option value="mp4-2160">Video · 4K</option>
-          <option value="mp4-1080">Video · 1080p</option>
-          <option value="mp4-720">Video · 720p</option>
-        </select>
-        <button type="submit">Download</button>
-      </form>
-      <p id="hint">Caută un clip sau lipează un link. Folderul se alege la fiecare download.</p>
-      <section id="results" aria-live="polite"></section>
-      <div id="pagination">
-        <button id="prev-page" type="button" disabled>← Pagina anterioară</button>
-        <span id="page-info">0 din 0</span>
-        <button id="next-page" type="button" disabled>Pagina următoare →</button>
+      <nav class="tabs">
+        <button class="tab active" data-tab="youtube" type="button">YouTube</button>
+        <button class="tab" data-tab="instagram" type="button">Instagram</button>
+        <button class="tab" data-tab="tiktok" type="button">TikTok</button>
+      </nav>
+      <div class="tab-panel active" id="panel-youtube">
+        <form id="search-form">
+          <input id="query" autocomplete="off" placeholder="Căută pe YouTube" autofocus>
+          <button type="submit">Caută</button>
+        </form>
+        <form id="url-form">
+          <input id="youtube-url" autocomplete="off" placeholder="sau lipești linkul YouTube aici">
+          <select id="direct-format" aria-label="Format link direct">
+            <option value="wav" selected>Audio · WAV</option>
+            <option value="mp3">Audio · MP3</option>
+            <option value="mp4-2160">Video · 4K</option>
+            <option value="mp4-1080">Video · 1080p</option>
+            <option value="mp4-720">Video · 720p</option>
+          </select>
+          <button type="submit">Download</button>
+        </form>
+        <p id="hint">Caută un clip sau lipești un link. Folderul se alege la fiecare download.</p>
+        <section id="results" aria-live="polite"></section>
+        <div id="pagination">
+          <button id="prev-page" type="button" disabled>← Pagina anterioară</button>
+          <span id="page-info">0 din 0</span>
+          <button id="next-page" type="button" disabled>Pagina următoare →</button>
+        </div>
+      </div>
+      <div class="tab-panel" id="panel-instagram">
+        <form id="instagram-form" class="single-url-form">
+          <input id="instagram-url" autocomplete="off" placeholder="Lipești linkul Instagram aici (post / reel / story)">
+          <select id="instagram-format" aria-label="Format Instagram">
+            <option value="mp3" selected>Audio · MP3</option>
+            <option value="wav">Audio · WAV</option>
+            <option value="mp4">Video · MP4</option>
+          </select>
+          <button type="submit">Download</button>
+        </form>
+        <p id="instagram-hint" class="tab-hint">Lipești un link Instagram (post, reel sau story). Se descarcă audio sau video.</p>
+        <section id="instagram-results" aria-live="polite"></section>
+      </div>
+      <div class="tab-panel" id="panel-tiktok">
+        <form id="tiktok-form" class="single-url-form">
+          <input id="tiktok-url" autocomplete="off" placeholder="Lipești linkul TikTok aici (video / vm.tiktok)">
+          <select id="tiktok-format" aria-label="Format TikTok">
+            <option value="mp3" selected>Audio · MP3</option>
+            <option value="wav">Audio · WAV</option>
+            <option value="mp4">Video · MP4</option>
+          </select>
+          <button type="submit">Download</button>
+        </form>
+        <p id="tiktok-hint" class="tab-hint">Lipești un link TikTok (video sau vm.tiktok.com). Se descarcă audio sau video.</p>
+        <section id="tiktok-results" aria-live="polite"></section>
       </div>
     </main>
     <template id="result-template">
@@ -56,6 +89,19 @@
               <option value="mp4-720">Video · 720p</option>
             </select>
             <button class="download" type="button">Download</button>
+          </div>
+        </div>
+      </article>
+    </template>
+    <template id="simple-result-template">
+      <article class="result simple-result">
+        <div class="info">
+          <div class="details">
+            <strong></strong>
+            <small></small>
+          </div>
+          <div class="actions">
+            <button class="download done" type="button" disabled>✓ Importat</button>
           </div>
         </div>
       </article>

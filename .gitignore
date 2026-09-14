@@ -1,2 +1,5 @@
 bin/ffmpeg.exe
 bin/ffprobe.exe
+bin/ffmpeg
+bin/ffprobe
+bin/yt-dlp

@@ -55,8 +55,12 @@ function startLocalServer() {
 }
 
 function executable(name) {
-  const bundled = path.join(pluginRoot, 'bin', name);
-  return fs.existsSync(bundled) ? bundled : name;
+  // Cross-platform: try .exe (Windows) then plain (macOS)
+  const withExe = path.join(pluginRoot, 'bin', name + '.exe');
+  const plain = path.join(pluginRoot, 'bin', name);
+  if (fs.existsSync(withExe)) return withExe;
+  if (fs.existsSync(plain)) return plain;
+  return name;
 }
 
 function ensureTool(name) {
@@ -163,7 +167,7 @@ app.whenReady().then(async () => {
     event.preventDefault();
     mainWindow.hide();
   });
-  globalShortcut.register('Control+3', () => {
+  globalShortcut.register('CommandOrControl+3', () => {
     if (!mainWindow) return;
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.show();
@@ -183,7 +187,7 @@ ipcMain.handle('search', async (_event, query) => {
   if (!text) return [];
   searchState.query = text;
   searchState.offset = 0;
-  const tool = ensureTool('yt-dlp.exe');
+  const tool = ensureTool('yt-dlp');
   const count = searchState.pageSize;
   const { stdout } = await run(tool, [
     '--flat-playlist', '--dump-single-json', '--no-warnings',
@@ -204,7 +208,7 @@ ipcMain.handle('search', async (_event, query) => {
 
 ipcMain.handle('search-more', async () => {
   if (!searchState.query) return [];
-  const tool = ensureTool('yt-dlp.exe');
+  const tool = ensureTool('yt-dlp');
   const start = searchState.offset + 1;
   const end = searchState.offset + searchState.pageSize;
   // Request enough total results to cover the next page
@@ -235,7 +239,7 @@ ipcMain.handle('get-info', async (_event, url) => {
   if (!urlPatterns.test(sourceUrl)) {
     throw new Error('URL invalid. Suportă YouTube, Instagram și TikTok.');
   }
-  const tool = ensureTool('yt-dlp.exe');
+  const tool = ensureTool('yt-dlp');
   const { stdout } = await run(tool, ['--dump-json', '--no-warnings', sourceUrl]);
   const info = JSON.parse(stdout);
   return {
@@ -296,7 +300,7 @@ ipcMain.handle('download', async (_event, request) => {
     }
   };
 
-  const tool = ensureTool('yt-dlp.exe');
+  const tool = ensureTool('yt-dlp');
   const { stdout } = await run(tool, args, sendProgress);
   const filePath = stdout.trim().split(/\r?\n/).filter(Boolean).pop();
   if (!filePath || !fs.existsSync(filePath)) throw new Error('Download-ul s-a terminat, dar fișierul final nu a fost găsit.');

@@ -1,13 +1,21 @@
-﻿# Videografiasi - YouTube, Instagram si TikTok Downloader pentru DaVinci Resolve Studio
+# Videografiasi - YouTube, Instagram si TikTok Downloader pentru DaVinci Resolve Studio
 
 Plugin Workflow Integration pentru DaVinci Resolve Studio. Cauta si descarca video/audio de pe YouTube, Instagram si TikTok direct din DaVinci Resolve.
 
-## Instalare rapida
+## Instalare rapida - Windows
 
 Deschide **PowerShell ca Administrator** si ruleaza:
 
 `powershell
 irm https://raw.githubusercontent.com/filmstoryluxe/videoYTDL/main/install.ps1 | iex
+`
+
+## Instalare rapida - macOS
+
+Deschide **Terminal** si ruleaza:
+
+`ash
+curl -sL https://raw.githubusercontent.com/filmstoryluxe/videoYTDL/main/install.sh | bash
 `
 
 Asta e tot. Reporneste DaVinci Resolve -> Workspace -> Workflow Integrations -> Videografiasi.
@@ -37,7 +45,7 @@ Asta e tot. Reporneste DaVinci Resolve -> Workspace -> Workflow Integrations -> 
 ## Cerinte
 
 - DaVinci Resolve Studio (cu Workflow Integrations instalat)
-- Windows 10/11
+- Windows 10/11 sau macOS (Intel/Apple Silicon)
 - Conexiune internet
 
 ## Versiune

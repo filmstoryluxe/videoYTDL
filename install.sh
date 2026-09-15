@@ -6,7 +6,11 @@ set -e
 
 REPO="https://github.com/filmstoryluxe/videoYTDL/archive/refs/heads/main.zip"
 TEMP_DIR=$(mktemp -d)
-TARGET="/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Workflow Integration Plugins/videografiasi-youtube-download"
+
+# DaVinci Resolve 21 pe macOS cauta pluginuri in user-space:
+# ~/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins/
+# (NU in /Library/.../Support/Workflow Integration Plugins/ cum e pe Windows)
+TARGET="$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins/videografiasi-youtube-download"
 
 echo "Videografiasi - YouTube, Instagram si TikTok Downloader pentru DaVinci Resolve"
 echo ""
@@ -78,12 +82,12 @@ for candidate in \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/CompatibleSamplePlugin/WorkflowIntegration.node" \
+  "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/ScriptTestPlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
-  "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
@@ -119,9 +123,9 @@ if [ -z "$DEV_NODE" ]; then
   echo ""
   echo "Eroare: Nu am gasit WorkflowIntegration.node"
   echo ""
-  echo "Acest fisier vine cu DaVinci Resolve. Posibile cauze:"
-  echo "  1. DaVinci Resolve nu este instalat"
-  echo "  2. Nu ai instalat Workflow Integration plugin din DaVinci Resolve"
+  echo "Acest fisier vine cu DaVinci Resolve Studio. Posibile cauze:"
+  echo "  1. DaVinci Resolve nu este instalat sau este versiunea GRATUITA (nu Studio)"
+  echo "  2. Nu ai instalat Workflow Integration din DaVinci Resolve"
   echo "  3. Versiune diferita de DaVinci Resolve"
   echo ""
   echo "Incearca manual:"
@@ -131,12 +135,13 @@ if [ -z "$DEV_NODE" ]; then
   exit 1
 fi
 
-# === Install ===
+# === Install (user-space, fara sudo) ===
 echo "[5/5] Instalare..."
-sudo rm -rf "$TARGET" 2>/dev/null || true
-sudo mkdir -p "$TARGET"
-sudo cp -R "$SOURCE/"* "$TARGET/"
-sudo cp "$DEV_NODE" "$TARGET/WorkflowIntegration.node"
+echo "    Target: $TARGET"
+rm -rf "$TARGET" 2>/dev/null || true
+mkdir -p "$TARGET"
+cp -R "$SOURCE/"* "$TARGET/"
+cp "$DEV_NODE" "$TARGET/WorkflowIntegration.node"
 
 rm -rf "$TEMP_DIR"
 

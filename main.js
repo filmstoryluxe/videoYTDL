@@ -3,6 +3,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
+const WorkflowIntegration = require('./WorkflowIntegration.node');
 
 const PLUGIN_ID = 'com.videografiasi.youtube.download';
 const pluginRoot = __dirname;
@@ -126,21 +127,28 @@ async function importIntoResolve(filePath) {
   }
 }
 
-function setupResolveBridge() {
-  const nodePath = path.join(pluginRoot, 'WorkflowIntegration.node');
-  if (!fs.existsSync(nodePath)) return;
+async function setupResolveBridge() {
   try {
-    const workflow = require(nodePath);
-    workflow.Initialize(PLUGIN_ID);
-    resolve = workflow.GetResolve();
-    app.on('before-quit', () => workflow.CleanUp());
+    const isSuccess = await WorkflowIntegration.Initialize(PLUGIN_ID);
+    if (!isSuccess) {
+      console.warn('Videografiasi: Failed to initialize Resolve interface');
+      return;
+    }
+    resolve = await WorkflowIntegration.GetResolve();
+    if (!resolve) {
+      console.warn('Videografiasi: Failed to get Resolve object');
+      return;
+    }
+    app.on('before-quit', () => {
+      try { WorkflowIntegration.CleanUp(); } catch (e) {}
+    });
   } catch (error) {
-    console.warn('Resolve bridge unavailable:', error.message);
+    console.warn('Videografiasi: Resolve bridge unavailable:', error.message);
   }
 }
 
 app.whenReady().then(async () => {
-  setupResolveBridge();
+  await setupResolveBridge();
   const localOrigin = await startLocalServer();
   mainWindow = new BrowserWindow({
     width: 760,

@@ -73,16 +73,23 @@ done
 echo "    Caut WorkflowIntegration.node..."
 DEV_NODE=""
 
-# Cautare in toate locatiile posibile
+# Cautare in toate locatiile posibile (cu si fara Support/ in cale)
 for candidate in \
+  "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
+  "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
+  "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/CompatibleSamplePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
+  "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
+  "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Resources/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
-  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Resources/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node"; do
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Resources/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node"; do
   if [ -f "$candidate" ]; then
     DEV_NODE="$candidate"
     echo "    Gasit: $candidate"

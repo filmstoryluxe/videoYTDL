@@ -70,20 +70,57 @@ for f in "${REQUIRED[@]}"; do
 done
 
 # === 5. WorkflowIntegration.node ===
+echo "    Caut WorkflowIntegration.node..."
 DEV_NODE=""
+
+# Cautare in toate locatiile posibile
 for candidate in \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
-  "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node"; do
+  "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Resources/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
+  "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Resources/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node"; do
   if [ -f "$candidate" ]; then
     DEV_NODE="$candidate"
+    echo "    Gasit: $candidate"
     break
   fi
 done
 
+# Fallback: cautare cu find in directoarele Blackmagic Design si Applications
 if [ -z "$DEV_NODE" ]; then
+  echo "    Cautare automata..."
+  for search_dir in \
+    "/Library/Application Support/Blackmagic Design" \
+    "$HOME/Library/Application Support/Blackmagic Design" \
+    "/Applications/DaVinci Resolve"; do
+    if [ -d "$search_dir" ]; then
+      FOUND=$(find "$search_dir" -name "WorkflowIntegration.node" -type f 2>/dev/null | head -1)
+      if [ -n "$FOUND" ]; then
+        DEV_NODE="$FOUND"
+        echo "    Gasit: $FOUND"
+        break
+      fi
+    fi
+  done
+fi
+
+if [ -z "$DEV_NODE" ]; then
+  echo ""
   echo "Eroare: Nu am gasit WorkflowIntegration.node"
+  echo ""
+  echo "Acest fisier vine cu DaVinci Resolve. Posibile cauze:"
+  echo "  1. DaVinci Resolve nu este instalat"
+  echo "  2. Nu ai instalat Workflow Integration plugin din DaVinci Resolve"
+  echo "  3. Versiune diferita de DaVinci Resolve"
+  echo ""
+  echo "Incearca manual:"
+  echo "  find / -name WorkflowIntegration.node 2>/dev/null"
+  echo ""
+  echo "Daca l-ai gasit, copiaza-l in plugin si ruleaza din nou."
   exit 1
 fi
 

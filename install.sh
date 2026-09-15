@@ -145,6 +145,10 @@ cp "$DEV_NODE" "$TARGET/WorkflowIntegration.node"
 
 rm -rf "$TEMP_DIR"
 
+# === macOS Gatekeeper: deblocheaza pluginul ===
+echo "    Deblocare Gatekeeper..."
+xattr -cr "$TARGET" 2>/dev/null || true
+
 echo ""
 echo "INSTALAT cu succes!"
 echo ""

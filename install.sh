@@ -75,7 +75,7 @@ for candidate in \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node" \
   "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePlugin/WorkflowIntegration.node" \
-  $HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node"; do
+  "$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Support/Developer/Workflow Integrations/Examples/SamplePromisePlugin/WorkflowIntegration.node"; do
   if [ -f "$candidate" ]; then
     DEV_NODE="$candidate"
     break
